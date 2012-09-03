@@ -29,9 +29,10 @@
 set -e
 
 LD="$1"
-KBUILD_LDFLAGS="$2"
-LDFLAGS_vmlinux="$3"
-VMLINUX="$4"
+LDFINAL="$2"
+KBUILD_LDFLAGS="$3"
+LDFLAGS_vmlinux="$4"
+VMLINUX="$5"
 
 is_enabled() {
 	grep -q "^$1=y" include/config/auto.conf
@@ -84,7 +85,7 @@ vmlinux_link()
 		ldlibs="-lutil -lrt -lpthread"
 	else
 		wl=
-		ld="${LD}"
+		ld="${LDFINAL}"
 		ldflags="${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}"
 		ldlibs=
 	fi

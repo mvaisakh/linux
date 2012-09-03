@@ -24,3 +24,6 @@ Kernel Build System
     gendwarfksyms
 
     bash-completion
+
+    lto-build
+
