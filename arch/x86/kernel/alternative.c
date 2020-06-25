@@ -2304,7 +2304,7 @@ asm (
 "	.popsection\n"
 );
 
-extern void int3_selftest_ip(void); /* defined in asm below */
+extern __visible void int3_selftest_ip(void); /* defined in asm below */
 
 static int __init
 int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
