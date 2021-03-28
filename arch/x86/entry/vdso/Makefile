@@ -3,6 +3,8 @@
 # Building vDSO images for x86.
 #
 
+KBUILD_CFLAGS +=		$(DISABLE_LTO_GCC)
+
 # Regular kernel objects
 obj-y				:= vma.o extable.o
 obj-$(CONFIG_COMPAT_32)		+= vdso32-setup.o
