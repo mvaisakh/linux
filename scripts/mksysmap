@@ -19,6 +19,7 @@
 # N: debugging symbols
 # U: undefined global symbols
 # w: local weak symbols
+# W: weak symbols if they contain .c.
 / [aNUw] /d
 
 # ---------------------------------------------------------------------------
@@ -85,6 +86,7 @@
 # MODULE_INFO()
 / __UNIQUE_ID_modinfo[0-9]*$/d
 
+/ W\.*\.c\./d
 # ---------------------------------------------------------------------------
 # Ignored patterns
 #  (symbols that contain the pattern are ignored)
