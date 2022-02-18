@@ -2727,6 +2727,7 @@ static inline void put_prev_set_next_task(struct rq *rq,
  */
 #define DEFINE_SCHED_CLASS(name) \
 const struct sched_class name##_sched_class \
+	__noreorder \
 	__aligned(__alignof__(struct sched_class)) \
 	__section("__" #name "_sched_class")
 
