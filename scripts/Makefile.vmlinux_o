@@ -73,7 +73,7 @@ endef
 
 
 vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-	$(call if_changed_rule,ld_vmlinux.o)
+	+$(call if_changed_rule,ld_vmlinux.o)
 
 targets += vmlinux.o
 
