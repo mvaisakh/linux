@@ -2273,11 +2273,12 @@ int alternatives_text_reserved(void *start, void *end)
  * See entry_{32,64}.S for more details.
  */
 
-extern void int3_selftest_asm(unsigned int *ptr);
+extern void __visible int3_selftest_asm(unsigned int *ptr);
 
 asm (
 "	.pushsection	.init.text, \"ax\", @progbits\n"
 "	.type		int3_selftest_asm, @function\n"
+"	.globl		int3_selftest_asm\n"
 "int3_selftest_asm:\n"
 	ANNOTATE_NOENDBR "\n"
 	/*
@@ -2291,11 +2292,12 @@ asm (
 "	.popsection\n"
 );
 
-extern void int3_selftest_callee(unsigned int *ptr);
+extern void __visible int3_selftest_callee(unsigned int *ptr);
 
 asm (
 "	.pushsection	.init.text, \"ax\", @progbits\n"
 "	.type		int3_selftest_callee, @function\n"
+"	.globl		int3_selftest_callee\n"
 "int3_selftest_callee:\n"
 	ANNOTATE_NOENDBR "\n"
 "	movl	$0x1234, (%" _ASM_ARG1 ")\n"
