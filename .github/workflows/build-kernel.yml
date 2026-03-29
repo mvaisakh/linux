@@ -1,0 +1,61 @@
+name: Build Fedora Mainline Kernel
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container: fedora:rawhide
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Build Dependencies
+        run: |
+          dnf install -y git gcc make ncurses-devel flex bison openssl-devel \
+          elfutils-libelf-devel bc rsync rpm-build perl-devel perl-generators \
+          python3-devel diffutils binutils-devel hostname elfutils-devel dwarves \
+          openssl perl
+
+      - name: Generate Next Version
+        id: tagging
+        run: |
+          # Fetch the latest tag, default to v0.00b if none exists
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.00b")
+
+          # Strip 'v' and 'b', increment the number
+          BASE_NUM=$(echo $LATEST_TAG | sed 's/v//;s/b//')
+          NEXT_NUM=$(echo "$BASE_NUM + 0.01" | bc | sed 's/^\./0./')
+          NEXT_TAG="v${NEXT_NUM}b"
+
+          echo "NEW_TAG=$NEXT_TAG" >> $GITHUB_OUTPUT
+          echo "Next version will be $NEXT_TAG"
+
+      - name: Configure Kernel
+        run: |
+            make dell_defconfig
+
+      - name: Build RPM Packages
+        run: |
+          make -j$(nproc) binrpm-pkg
+
+      - name: Prepare Artifacts
+        run: |
+          mkdir -p output
+          mv ~/rpmbuild/RPMS/*/*.rpm output/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tagging.outputs.NEW_TAG }}
+          name: Kernel Release ${{ steps.tagging.outputs.NEW_TAG }}
+          body: "Automated build of mainline kernel version ${{ steps.tagging.outputs.NEW_TAG }}"
+          prerelease: true
+          files: output/*.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
