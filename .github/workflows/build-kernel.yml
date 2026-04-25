@@ -44,6 +44,17 @@ jobs:
         run: |
           make -j$(nproc) binrpm-pkg
 
+      - name: Dump orphaned metadata
+        run: |
+          objdump -r -j .discard.annotate_insn vmlinux.o > annotate_relocs.txt
+
+      - name: Upload Annotate Relocations
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: objtool-relocs
+          path: annotate_relocs.txt
+
       - name: Prepare Artifacts
         run: |
           mkdir -p output

@@ -2383,8 +2383,8 @@ static int read_annotate(struct objtool_file *file,
 		insn = find_insn(file, reloc->sym->sec, offset);
 
 		if (!insn) {
-			ERROR("bad .discard.annotate_insn entry: %d of type %d", reloc_idx(reloc), type);
-			return -1;
+			WARN("bad .discard.annotate_insn entry: %d of type %d", reloc_idx(reloc), type);
+			continue;
 		}
 
 		if (func(file, type, insn))
