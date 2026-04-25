@@ -16,6 +16,7 @@ ifdef CONFIG_LTO_GCC
 
 	lto-flags-y := -flinker-output=nolto-rel -flto=jobserver
 	lto-flags-y += -fwhole-program
+	lto-flags-y += -Wno-alloc-size-larger-than
 
 	lto-flags-$(CONFIG_LTO_CP_CLONE) += -fipa-cp-clone
 
