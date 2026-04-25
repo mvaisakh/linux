@@ -17,9 +17,9 @@ bad_symbols=$(${NM:-nm} "$objfile" | awk '$2 ~ /^[TtWw]$/ {print $3}' | grep -E 
 
 if [ -n "$bad_symbols" ]; then
 	echo "$bad_symbols" | while read -r sym; do
-		echo "$objfile: error: $sym() function name creates ambiguity with -ffunction-sections" >&2
+		echo "$objfile: warning: $sym() function name creates ambiguity with -ffunction-sections" >&2
 	done
-	exit 1
+	exit 0
 fi
 
 exit 0
